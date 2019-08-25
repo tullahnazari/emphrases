@@ -36,7 +36,9 @@ fun Application.module(testing: Boolean = false) {
 
 
     routing {
+
        home()
+        phrases(db)
         phrase(db)
     }
 }
