@@ -12,6 +12,7 @@ import io.ktor.auth.*
 import io.ktor.features.*
 import io.ktor.freemarker.*
 import io.ktor.http.*
+import io.ktor.http.content.*
 import io.ktor.response.*
 import io.ktor.request.*
 import io.ktor.routing.*
@@ -57,6 +58,9 @@ fun Application.module(testing: Boolean = false) {
 
 
     routing {
+        static("/static") {
+            resources("images")
+        }
 
         home()
         about()
