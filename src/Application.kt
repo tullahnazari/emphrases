@@ -1,11 +1,14 @@
 package com.tullahnazari.emphrases
 
 import com.ryanharter.ktor.moshi.*
+import com.sun.net.httpserver.*
+import com.tullahnazari.emphrases.Model.*
 import com.tullahnazari.emphrases.Repository.*
 import com.tullahnazari.emphrases.Routes.*
 import com.tullahnazari.emphrases.api.*
 import freemarker.cache.*
 import io.ktor.application.*
+import io.ktor.auth.*
 import io.ktor.features.*
 import io.ktor.freemarker.*
 import io.ktor.http.*
@@ -39,6 +42,17 @@ fun Application.module(testing: Boolean = false) {
     install(FreeMarker) {
         templateLoader = ClassTemplateLoader(this::class.java.classLoader, "Templates")
 
+    }
+
+    install(Authentication) {
+        basic(name = "auth") {
+            validate { credentials ->
+                if (credentials.password == "${credentials.name}123")
+                    User(credentials.name )
+                else
+                    null
+            }
+        }
     }
 
 
