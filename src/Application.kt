@@ -4,8 +4,10 @@ import com.ryanharter.ktor.moshi.*
 import com.tullahnazari.emphrases.Repository.*
 import com.tullahnazari.emphrases.Routes.*
 import com.tullahnazari.emphrases.api.*
+import freemarker.cache.*
 import io.ktor.application.*
 import io.ktor.features.*
+import io.ktor.freemarker.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.request.*
@@ -33,6 +35,11 @@ fun Application.module(testing: Boolean = false) {
     }
 
     val  db = inMemoryRepo()
+
+    install(FreeMarker) {
+        templateLoader = ClassTemplateLoader(this::class.java.classLoader, "Templates")
+
+    }
 
 
     routing {
