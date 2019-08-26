@@ -6,10 +6,12 @@ import com.tullahnazari.emphrases.Repository.*
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.freemarker.*
+import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import java.lang.IllegalArgumentException
 
-const val PHRASES = "$API_VERSION/phrases"
+const val PHRASES = "/phrases"
 
 fun Route.phrases(db: Repository) {
 
@@ -19,6 +21,13 @@ fun Route.phrases(db: Repository) {
             val phrases = db.phrases()
             call.respond(FreeMarkerContent("phrases.ftl", mapOf("phrases" to phrases,
                 "displayName" to user.displayName)))
+        }
+        post(PHRASES) {
+            val params = call.receiveParameters()
+            val emoji = params["emoji"] ?: throw IllegalArgumentException("Missing parameter: emoji")
+            val phrase = params["phrase"] ?: throw IllegalArgumentException("Missing parameter: phrase")
+            db.add(EmojiPhrase(emoji, phrase))
+            call.respondRedirect(PHRASES)
         }
     }
 }

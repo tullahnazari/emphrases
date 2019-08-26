@@ -9,7 +9,7 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 
-const val PHRASE_ENDPOINT = "$API_VERSION/phrase"
+const val PHRASE_ENDPOINT = "/phrase"
 
 fun Route.phrase(db: Repository) {
 
