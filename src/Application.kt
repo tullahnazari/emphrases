@@ -2,6 +2,7 @@ package com.tullahnazari.emphrases
 
 import com.ryanharter.ktor.moshi.*
 import com.sun.net.httpserver.*
+import com.sun.tools.javac.file.*
 import com.tullahnazari.emphrases.Model.*
 import com.tullahnazari.emphrases.Repository.*
 import com.tullahnazari.emphrases.Routes.*
@@ -13,11 +14,14 @@ import io.ktor.features.*
 import io.ktor.freemarker.*
 import io.ktor.http.*
 import io.ktor.http.content.*
+import io.ktor.locations.*
+import io.ktor.locations.Locations
 import io.ktor.response.*
 import io.ktor.request.*
 import io.ktor.routing.*
 import io.netty.handler.codec.*
 import io.netty.handler.codec.DefaultHeaders
+
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -38,6 +42,7 @@ fun Application.module(testing: Boolean = false) {
         moshi()
     }
 
+
     val  db = inMemoryRepo()
 
     install(FreeMarker) {
@@ -56,10 +61,14 @@ fun Application.module(testing: Boolean = false) {
         }
     }
 
+    install(Locations)
+
+
+
 
     routing {
         static("/static") {
-            resources("images")
+            this.resources("images")
         }
 
         home()
@@ -70,6 +79,10 @@ fun Application.module(testing: Boolean = false) {
 }
 
 const val API_VERSION= "/api/v1"
+
+suspend fun ApplicationCall.redirect(location: Any) {
+    respondRedirect(application.locations.href(location))
+}
 
 
 
