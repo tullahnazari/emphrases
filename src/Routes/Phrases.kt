@@ -19,7 +19,6 @@ class Phrases
 
 fun Route.phrases(db: Repository) {
 
-    authenticate("auth") {
         get<Phrases> {
             val user = call.authentication.principal as User
             val phrases = db.phrases()
@@ -37,10 +36,9 @@ fun Route.phrases(db: Repository) {
                 "add" -> {
                     val emoji = params["emoji"] ?: throw IllegalArgumentException("Missing parameter: emoji")
                     val phrase = params["phrase"] ?: throw IllegalArgumentException("Missing parameter: phrase")
-                    db.add(emoji, phrase)
+                    db.add("", emoji, phrase)
                 }
             }
             call.redirect(Phrases())
         }
     }
-}
