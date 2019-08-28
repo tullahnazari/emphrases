@@ -43,8 +43,6 @@ fun Application.module(testing: Boolean = false) {
     }
 
 
-    val  db = inMemoryRepo()
-
     install(FreeMarker) {
         templateLoader = ClassTemplateLoader(this::class.java.classLoader, "Templates")
 
@@ -62,6 +60,10 @@ fun Application.module(testing: Boolean = false) {
     }
 
     install(Locations)
+
+    DatabaseFactory.init()
+
+    val db = EmojiPhrasesRepository()
 
 
 
